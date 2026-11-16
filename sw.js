@@ -1,6 +1,6 @@
 // PK Trénink – offline cache. Bump VERSION on every release.
-const VERSION = 'pk-trenink-2026-11-16a';
-const FILES = ['./', './index.html', './ex.js', './app.js', './manifest.json', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
+const VERSION = 'pk-trenink-2026-11-16c';
+const FILES = ['./', './index.html', './ex.js', './food.js', './app.js', './manifest.json', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
 });

@@ -11,7 +11,7 @@ const TYPES = ['Bolest při pohybu','Bolest po tréninku','Píchnutí','Lupnutí
 const RED_TYPES = ['Lupnutí / prasknutí','Otok nebo modřina','Brnění nebo necitlivost','Ztráta síly'];
 
 // ---------- storage ----------
-function blank(){return {sessions:[],measures:[],issues:[],drafts:{},day:'den-1'};}
+function blank(){return {sessions:[],measures:[],issues:[],drafts:{},day:'den-1',foods:[],meals:[]};}
 function load(){
   try{const s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.sessions) return Object.assign(blank(),s);}catch(e){}
   return blank();
@@ -55,7 +55,7 @@ function setsText(sets,timed,unit){
 }
 
 // ---------- router ----------
-const VIEWS={trenink:renderTrain,mereni:renderMeasure,potize:renderIssues,export:renderExport};
+const VIEWS={trenink:renderTrain,jidlo:()=>renderFood(),mereni:renderMeasure,potize:renderIssues,export:renderExport};
 function route(){
   let v=(location.hash||'#trenink').slice(1); if(!VIEWS[v]) v='trenink';
   document.querySelectorAll('nav.tabbar a').forEach(a=>a.dataset.v===v?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'));
@@ -301,7 +301,7 @@ function renderExport(){
     <div class="chips" role="group" aria-label="Období">${[[28,'4 týdny'],[56,'8 týdnů'],[0,'Vše']].map(([d,n])=>`<button class="chip" data-d="${d}" aria-pressed="${d===expDays}">${n}</button>`).join('')}</div>
     <div class="row2"><button class="btn primary big" id="share">Sdílet…</button><button class="btn big" id="copy">Kopírovat</button></div>
     <pre class="exp" id="exp">${esc(txt)}</pre>
-    <h2>Záloha dat</h2><p class="small">Zálohu si občas uložte do Souborů (iCloud). Hodí se při výměně telefonu.</p>
+    <div id="foodexp"></div><h2>Záloha dat</h2><p class="small">Zálohu si občas uložte do Souborů nebo pošlete AirDropem na Mac. Hodí se při výměně telefonu. Fotky jídel záloha neobsahuje – jsou v balících jídla.</p>
     <div class="row2"><button class="btn big" id="backup">Uložit zálohu</button><label class="btn big" style="text-align:center" for="restore">Obnovit ze zálohy</label></div>
     <input type="file" id="restore" accept="application/json,.json" hidden>
     <h2>Uložené tréninky (${ST.sessions.length})</h2>`;
@@ -332,11 +332,12 @@ function renderExport(){
   $('#restore').onchange=async e=>{
     const f=e.target.files[0];if(!f)return;
     try{const d=JSON.parse(await f.text());if(d.app!=='pk-trenink'||!Array.isArray(d.sessions))throw 0;
-      ST=Object.assign(blank(),{sessions:d.sessions,measures:d.measures||[],issues:d.issues||[],drafts:d.drafts||{},day:d.day||'den-1'});save();badge();
+      ST=Object.assign(blank(),{sessions:d.sessions,measures:d.measures||[],issues:d.issues||[],drafts:d.drafts||{},day:d.day||'den-1',foods:d.foods||[],meals:d.meals||[]});save();badge();
       toast(`Obnoveno: ${ST.sessions.length} tréninků, ${ST.measures.length} měření, ${ST.issues.length} potíží`);renderExport();}
     catch(err){toast('Tohle není záloha z PK Trénink');}
   };
   bindList(ST.sessions,renderExport);
+  renderFoodExport($('#foodexp'));
 }
 function selectExp(){const r=document.createRange();r.selectNodeContents($('#exp'));const s=getSelection();s.removeAllRanges();s.addRange(r);}
 

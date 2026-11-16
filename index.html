@@ -43,6 +43,7 @@ body{background:var(--bg);color:var(--ink);font:16px/1.4 var(--font);
   padding:env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left)}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
+a{color:var(--accent)}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 #view{max-width:720px;margin:0 auto;padding:12px 16px calc(96px + env(safe-area-inset-bottom))}
 h1{font:700 1.75rem/1.1 var(--display);margin:6px 0 2px;letter-spacing:-.01em}
@@ -100,7 +101,7 @@ table.t{width:100%;border-collapse:collapse;font-size:.88rem;font-variant-numeri
 .scroll{overflow-x:auto}
 pre.exp{white-space:pre-wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;font:13px/1.45 ui-monospace,Menlo,monospace;max-height:340px;overflow:auto}
 nav.tabbar{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
+  border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
 nav.tabbar a{text-decoration:none;color:var(--muted);display:grid;justify-items:center;gap:2px;font-size:.72rem;font-weight:600;padding:4px 0;position:relative}
 nav.tabbar a svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 nav.tabbar a[aria-current="page"]{color:var(--accent)}
@@ -136,6 +137,25 @@ input[type=range]{width:100%}
 .arr{stroke:var(--accent);fill:none;stroke-width:2.5;stroke-linecap:round}
 .arrh{fill:var(--accent)}
 .lbl{fill:var(--muted);font:600 10px var(--font)}
+.daynav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 10px}
+.daynav .btn{min-width:44px;font-size:1.2rem}
+.daynav .btn:disabled{opacity:.35}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.grid3 .btn{padding:12px 6px;text-align:center;font-size:.98rem}
+.daysum{display:grid;gap:3px}
+.item.food .frow{display:flex;gap:10px;align-items:flex-start}
+.fbody{flex:1;min-width:0;display:grid;gap:2px}
+.thumb{width:64px;height:64px;border-radius:10px;object-fit:cover;background:var(--field);flex:0 0 auto}
+.thumb.ph{display:grid;place-items:center;color:var(--muted);font-size:1.4rem}
+.preview{width:100%;max-height:280px;object-fit:contain;border-radius:12px;background:var(--field)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.seg .btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.qty{display:flex;align-items:center;gap:14px}
+.qty .btn{min-width:52px;font-size:1.3rem}
+.qty output{font:700 1.5rem var(--display);min-width:48px;text-align:center;font-variant-numeric:tabular-nums}
+button.item.pick{text-align:left;border:1px solid var(--line);width:100%}
+.btn:disabled{opacity:.5}
+details summary{cursor:pointer;margin:4px 0}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -156,12 +176,14 @@ input[type=range]{width:100%}
 
 <nav class="tabbar" aria-label="Hlavní menu">
   <a href="#trenink" data-v="trenink"><svg viewBox="0 0 24 24"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/></svg>Trénink</a>
+  <a href="#jidlo" data-v="jidlo"><svg viewBox="0 0 24 24"><path d="M3 11h18a9 9 0 0 1-18 0z"/><path d="M9 7c0-1.5 1.5-1.5 1.5-3M13.5 7c0-1.5 1.5-1.5 1.5-3"/></svg>Jídlo</a>
   <a href="#mereni" data-v="mereni"><svg viewBox="0 0 24 24"><path d="M4 19h16M7 16V9M12 16V5M17 16v-4"/></svg>Měření</a>
   <a href="#potize" data-v="potize"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>Potíže<span class="badge" id="badge" hidden></span></a>
   <a href="#export" data-v="export"><svg viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M5 13v6h14v-6"/></svg>Export</a>
 </nav>
 
 <script src="ex.js"></script>
+<script src="food.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
